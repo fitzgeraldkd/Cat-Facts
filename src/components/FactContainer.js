@@ -1,13 +1,23 @@
 import React, { useEffect, useState } from 'react';
 import FactCard from './FactCard';
-import Search from './Search';
+import Controls from './Controls';
 
 function FactContainer() {
     const [catFacts, setCatFacts] = useState([]);
     const [resultsPage, setResultsPage] = useState(1);
+    const [filterText, setFilterText] = useState('');
+
+    const handleFilterChange = (e) => {
+        setFilterText(e.target.value);
+        setResultsPage(1);
+    }
+
+    const handlePageChange = (newPage) => {
+        setResultsPage(newPage);
+    }
 
     useEffect(() => {
-        fetch(`https://catfact.ninja/facts?page=${resultsPage}`)
+        fetch(`https://catfact.ninja/facts?limit=1000`)
             .then(resp => resp.json())
             .then(results => {
                 const newCatFacts = results.data.map((catFact, index) => {
@@ -16,12 +26,14 @@ function FactContainer() {
                 })
                 setCatFacts(newCatFacts);
             });
-    }, [resultsPage]);
+    }, []);
+
+    const filteredCatFacts = catFacts.filter(catFact => catFact.fact.toLowerCase().includes(filterText.toLowerCase()))
 
     return (
         <div>
-            <Search />
-            {catFacts.map(catFact => <FactCard key={catFact.id} catFact={catFact} />)}
+            <Controls filterText={filterText} handleFilterChange={handleFilterChange} filteredCatFacts={filteredCatFacts} resultsPage={resultsPage} handlePageChange={handlePageChange} />
+            {filteredCatFacts.slice((resultsPage-1)*10, resultsPage*10).map(catFact => <FactCard key={catFact.id} catFact={catFact} />)}
         </div>
     );
 }
