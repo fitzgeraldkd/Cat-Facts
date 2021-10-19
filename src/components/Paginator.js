@@ -3,7 +3,7 @@ import styles from './Paginator.module.css';
 
 function Paginator({ filteredCatFacts, resultsPage, handlePageChange }) {
 
-    const maxPage = Math.ceil(filteredCatFacts.length / 10);
+    const maxPage = Math.max(1, Math.ceil(filteredCatFacts.length / 10));
 
     const handleTypePage = (e) => {
         const newPage = e.target.value;

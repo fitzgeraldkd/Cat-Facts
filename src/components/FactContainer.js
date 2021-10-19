@@ -33,7 +33,7 @@ function FactContainer() {
     return (
         <div>
             <Controls filterText={filterText} handleFilterChange={handleFilterChange} filteredCatFacts={filteredCatFacts} resultsPage={resultsPage} handlePageChange={handlePageChange} />
-            {filteredCatFacts.slice((resultsPage-1)*10, resultsPage*10).map(catFact => <FactCard key={catFact.id} catFact={catFact} />)}
+            {filteredCatFacts.length > 0 ? filteredCatFacts.slice((resultsPage-1)*10, resultsPage*10).map(catFact => <FactCard key={catFact.id} catFact={catFact} />) : <p>No results found</p>}
         </div>
     );
 }
